@@ -1,0 +1,26 @@
+[app/ui]
+version = 7.0.0
+modtime = 1542261257.372967000
+
+[app/launcher]
+version = 7.0.0
+modtime = 1542261257.374696000
+
+[views/security_hub_overview]
+owner = patrick
+version = 7.0.0
+modtime = 1542381846.123011000
+
+[panels/namespaces]
+owner = patrick
+version = 7.0.0
+modtime = 1542264135.785221000
+
+[views/instance_cve_details]
+owner = patrick
+version = 7.0.0
+modtime = 1542303134.114636000
+
+[nav/default]
+version = 7.0.0
+modtime = 1542307671.022750000

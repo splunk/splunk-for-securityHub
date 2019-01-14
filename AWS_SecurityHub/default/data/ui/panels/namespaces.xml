@@ -1,0 +1,33 @@
+<panel>
+  <title>Namespaces</title>
+  <single>
+    <search>
+      <query>index=main sourcetype="aws:securityhub" 
+| rex field=Types{} (?&lt;Namespace&gt;.*)/(?&lt;Category&gt;.*)/(?&lt;Classifier&gt;.*)
+| stats count by Namespace  
+|sort Namespace</query>
+      <earliest>-24h@h</earliest>
+      <latest>now</latest>
+      <sampleRatio>1</sampleRatio>
+    </search>
+    <option name="colorBy">value</option>
+    <option name="colorMode">block</option>
+    <option name="drilldown">all</option>
+    <option name="numberPrecision">0</option>
+    <option name="rangeColors">["0x65a637","0xf7bc38","0xf58f39","0xd93f3c"]</option>
+    <option name="rangeValues">[0,70,100]</option>
+    <option name="showSparkline">1</option>
+    <option name="showTrendIndicator">1</option>
+    <option name="trellis.enabled">1</option>
+    <option name="trellis.scales.shared">1</option>
+    <option name="trellis.size">medium</option>
+    <option name="trendColorInterpretation">standard</option>
+    <option name="trendDisplayMode">absolute</option>
+    <option name="unitPosition">after</option>
+    <option name="useColors">1</option>
+    <option name="useThousandSeparators">1</option>
+    <drilldown>
+      <set token="Namespace">$trellis.name$</set>
+    </drilldown>
+  </single>
+</panel>

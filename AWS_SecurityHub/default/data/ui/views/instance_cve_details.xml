@@ -1,0 +1,44 @@
+<form>
+  <label>Instance CVE details</label>
+  <fieldset submitButton="false">
+    <input type="text" token="cve" searchWhenChanged="true" depends="$hidden$">
+      <label>cve</label>
+    </input>
+    <input type="time" token="field1">
+      <label></label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>instance CVE - links to MITRE CVE DB</title>
+      <table>
+        <search>
+          <query>index=main sourcetype="aws:securityhub" cve i-0e0b0b1578673c751
+| rex field=Types{} (?&lt;Namespace&gt;.*)/(?&lt;Category&gt;.*)/(?&lt;Classifier&gt;.*)
+|rex field=Resources{}.Id .*instance/(?&lt;instance&gt;.*)
+| stats count  by Classifier Description  Severity.Normalized
+|rename Severity.Normalized as Severity, Classifier as CVE
+|sort Severity CVE</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+        <drilldown>
+          <link target="_blank">http://cve.mitre.org/cgi-bin/cvename.cgi?name=$click.value$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+</form>

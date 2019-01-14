@@ -1,0 +1,127 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Lambda and logging setup for sending Security Hub findings to Splunk",
+    "Parameters" : {
+      "SplunkHECHost" : {
+        "Type" : "String",
+        "Description": "Provide your Splunk HEC host. Format: https://endpoint:8088"
+      },
+      "SplunkHECToken" : {
+        "Type" : "String",
+        "Description": "Provide a Splunk HEC Token. Format: 12345678-qwer-asdf-zxcv-123456789qwe"
+      }
+    },
+    "Resources": {
+      "LambdaInvokePermission": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+              "FunctionName": {
+                  "Fn::GetAtt": [
+                      "SecurityHubToSplunkLambda",
+                      "Arn"
+                  ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "events.amazonaws.com",
+              "SourceArn": {
+                  "Fn::GetAtt": [
+                      "SecurityHubToSplunkScheduledRule",
+                      "Arn"
+                  ]
+              }
+          }
+      },
+      "SecurityHubToSplunkLambdaRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+          "Path": "/",
+          "ManagedPolicyArns": [
+            "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          ],
+          "Policies": [
+            {
+              "PolicyName": "SecurityHubToSplunkLambdaPolicy",
+              "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Action": [
+                      "securityhub:UpdateFindings",
+                      "securityhub:GetFindings"
+                    ],
+                    "Effect": "Allow",
+                    "Resource": "*"
+                  }
+                ]
+              }
+            }
+          ],
+          "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Action": [
+                  "sts:AssumeRole"
+                ],
+                "Effect": "Allow",
+                "Principal": {
+                  "Service": [
+                    "lambda.amazonaws.com"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "SecurityHubToSplunkLambda": {
+        "Type": "AWS::Lambda::Function",
+        "Properties": {
+          "Handler": "security_hub_to_splunk_lambda.lambda_handler",
+          "Role": {
+            "Fn::GetAtt": [
+              "SecurityHubToSplunkLambdaRole",
+              "Arn"
+            ]
+          },
+          "FunctionName": "SecurityHubToSplunkLambda",
+          "Code": {
+            "ZipFile": {
+              "Fn::Join": [
+                "\n",
+                [
+                  "def lambda_handler(event, context):",
+                  "    # REPLACE CONTENTS OF THIS FILE WITH LAMBDA CODE FROM GITHUB REPOSITORY",
+                  "    return"
+                ]
+              ]
+            }
+          },
+          "Runtime": "python2.7",
+          "Timeout": 900,
+          "Environment": {
+            "Variables": {
+              "SPLUNK_HEC_HOST": {
+                "Ref": "SplunkHECHost"
+              },
+              "SPLUNK_HEC_TOKEN": {
+                "Ref": "SplunkHECToken"
+              }
+            }
+          }
+        }
+      },
+      "SecurityHubToSplunkScheduledRule": {
+        "Type": "AWS::Events::Rule",
+        "Properties": {
+          "Description": "ScheduledRule",
+          "ScheduleExpression": "cron(/15 * * * ? *)",
+          "State": "ENABLED",
+          "Targets": [{
+            "Arn": { "Fn::GetAtt": ["SecurityHubToSplunkLambda", "Arn"] },
+            "Id": "TargetFunctionV1"
+          }]
+        }
+      }
+    }
+  }
