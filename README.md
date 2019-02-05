@@ -79,3 +79,7 @@ Note: You will not be able to edit code inline in the Lambda console because the
 9.) To enable verbose logging, upload the SecurityHubToSplunkLambdaVerbose.zip to your Lambda function, all environment variables can be left as before. Verbose logs will be available in the Lambda function's CloudWatch logs after the Lambda runs.
 
 10.) To increase the interval GuardDuty sends updated findings to Security Hub, check that the CloudWatch Event notification setting is set to every 15 minutes in the settings section of the GuardDuty console.
+
+## Scaling
+
+1.) It is possible for the Lambda function to run out of memory on the 256MB setting that is initially configured by the CloudFormation template. If you see intermittent  errors (`Process exited before completing request`), increase the Lambda memory until errors are gone.
