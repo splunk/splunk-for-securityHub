@@ -12,7 +12,7 @@ Use the Trumpet Instructions to build the Cloudformation Templete that will auto
 
 #### Part 2: 
 	
-Lambda's boto3 python SDK has not yet been updated in Lambda to interact with AWS Security Hub. For now, this is solved by packaging the updated boto3 library (and dependencies) that the Lambda function needs to interact with AWS Security Hub in the zip.
+Load the SPL file for the example dashboards for Security Hub. 
 
 ## Prerequisites:
 
