@@ -18,8 +18,7 @@ Load the SPL file for the example dashboards for Security Hub.
 
 - A Splunk HTTP Event Collector endpoint that is accessible
 - A Splunk HTTP Event Collector Token with the following settings
-    - NO indexer acknowledgement
-    - Enabled
+    - Indexer acknowledgement Enabled
     - Events will be sent and indexed with sourcetype `aws:securityhub` regardless of the sourcetype set in the token
     - All other settings are optional
     - Security Hub dashboards require the events to be in the default index (main)
