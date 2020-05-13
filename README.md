@@ -10,6 +10,8 @@ There are two parts to setting up the AWS Security Hub to Splunk integration.
 	
 Follow the Trumpet instructions to build a Cloudformation template that will create a data pipeline for sending AWS Security Hub findings to Splunk.
 
+https://splunktrumpet.github.io/
+
 #### Part 2: 
 	
 Load the `AWS_SecurityHub.spl` file in this repository containing the example dashboards for Security Hub. 
@@ -21,7 +23,7 @@ Load the `AWS_SecurityHub.spl` file in this repository containing the example da
 ## Instructions:
 #### Sending Security Hub Findings to Splunk:
         
-Follow the [Trumpet Setup and Configuration guide](https://github.com/splunk/splunk-aws-project-trumpet). Be sure to select `Security Hub Findings` in the AWS CloudWatch Events dropdown.
+Follow the [Trumpet Setup and Configuration guide](https://github.com/splunk/splunk-aws-project-trumpet). Be sure to select `Security Hub Findings - Imported` in the AWS CloudWatch Events dropdown. Other data sources can be deselected.
 
 #### Viewing Security Hub Findings in Splunk:
 
@@ -29,7 +31,7 @@ Install the `AWS_SecurityHub.spl` file in this repository containing the Splunk 
 
 ## Troubleshooting
 
-1.) Check if events are being sent to Splunk by searching `sourcetype="aws:securityhub"`. Make sure the time period is set to a range of time where you would expect events.
+1.) Check if events are being sent to Splunk by searching `sourcetype="aws:securityhub*"`. Make sure the time period is set to a range of time where you would expect events.
 
 2.) Ensure the CloudFormation template was launched in an AWS region where AWS Security Hub is available.
 
